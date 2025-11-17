@@ -35,5 +35,20 @@ pipeline {
                 sh 'curl -s http://nginxwebsvr/index.php || true'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('MySonarQubeServer') {
+                        sh '''
+                        sonar-scanner \
+                            -Dsonar.projectKey=version2 \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://sonarqube:9000
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
