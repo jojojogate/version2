@@ -40,12 +40,14 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('MySonarQubeServer') {
-                        sh '''
-                        sonar-scanner \
+                        // Use the scanner tool you registered in Global Tool Configuration
+                        def scannerHome = tool 'SonarScanner'
+                        sh """
+                        ${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=version2 \
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://sonarqube:9000
-                        '''
+                        """
                     }
                 }
             }
