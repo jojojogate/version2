@@ -1,0 +1,6 @@
+projectKey=practicaltest
+serverUrl=http://localhost:9000
+serverVersion=25.7.0.110598
+dashboardUrl=http://localhost:9000/dashboard?id=practicaltest
+ceTaskId=9a8ccb8d-636a-4989-b656-34b444995dc9
+ceTaskUrl=http://localhost:9000/api/ce/task?id=9a8ccb8d-636a-4989-b656-34b444995dc9

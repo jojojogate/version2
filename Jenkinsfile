@@ -39,7 +39,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('MySonarQubeServer') {
+                    withSonarQubeEnv('sonarqube') {
                         // Use the scanner tool you registered in Global Tool Configuration
                         def scannerHome = tool 'SonarScanner'
                         sh """
