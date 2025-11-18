@@ -1,20 +1,20 @@
 <?php
-function is_common_password($pw) {
+function isCommonPassword($pw) {
     $list = file("top-1000.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     return in_array($pw, $list);
 }
 
-function is_valid_password($pw) {
+function isValidPassword($pw) {
     return strlen($pw) >= 8 &&
            preg_match('/[A-Z]/', $pw) &&
            preg_match('/[a-z]/', $pw) &&
-           preg_match('/[0-9]/', $pw) &&
-           !is_common_password($pw);
+           preg_match('/\d/', $pw) &&
+           !isCommonPassword($pw);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pw = $_POST["password"];
-    if (is_valid_password($pw)) {
+    if (isValidPassword($pw)) {
         header("Location: welcome.php?pw=" . urlencode($pw));
         exit();
     } else {
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head><title>Login Page</title></head>
 <body>
     <h1>Login Page</h1>
