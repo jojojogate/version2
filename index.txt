@@ -1,5 +1,5 @@
 <?php
-function isCommonPassword(string $pw): bool {
+function isCommonPassword($pw) {
     $filePath = __DIR__ . "/top-1000.txt";
 
     if (!file_exists($filePath)) {
@@ -8,10 +8,10 @@ function isCommonPassword(string $pw): bool {
     }
 
     $list = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    return in_array($pw, $list, true);
+    return in_array($pw, $list);
 }
 
-function isValidPassword(string $pw): bool {
+function isValidPassword($pw) {
     return strlen($pw) >= 8 &&
            preg_match('/[A-Z]/', $pw) &&
            preg_match('/[a-z]/', $pw) &&
@@ -34,14 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Login Page</title>
 </head>
 <body>
     <h1>Login Page</h1>
     <form method="post">
-        <label for="password">Enter password:</label>
-        <input type="password" id="password" name="password" required>
+        Enter password: 
+        <input type="password" name="password" required>
         <input type="submit" value="Login">
     </form>
 </body>
