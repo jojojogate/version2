@@ -1,48 +1,15 @@
-<?php
-function isCommonPassword(string $pw): bool {
-    $filePath = __DIR__ . "/top-1000.txt";
-
-    if (!file_exists($filePath)) {
-        // Prevent errors if file is missing during tests or deployment
-        return false;
-    }
-
-    $list = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    return in_array($pw, $list, true);
-}
-
-function isValidPassword(string $pw): bool {
-    return strlen($pw) >= 8 &&
-           preg_match('/[A-Z]/', $pw) &&
-           preg_match('/[a-z]/', $pw) &&
-           preg_match('/\d/', $pw) &&
-           !isCommonPassword($pw);
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $pw = $_POST["password"] ?? "";
-
-    if (isValidPassword($pw)) {
-        header("Location: welcome.php?pw=" . urlencode($pw));
-        exit();
-    } else {
-        header("Location: index.php");
-        exit();
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
+  <meta charset="UTF-8">
+  <title>Password Login</title>
 </head>
 <body>
-    <h1>Login Page</h1>
-    <form method="post">
-        <label for="password">Enter password:</label>
-        <input type="password" id="password" name="password" required>
-        <input type="submit" value="Login">
-    </form>
+  <h1>Login</h1>
+  <form method="post" action="validate.php">
+    <label for="password">Enter password:</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Login</button>
+  </form>
 </body>
 </html>

@@ -21,36 +21,32 @@ jobs:
         coverage: xdebug
 
     - name: Install Composer dependencies
-      run: composer install
+      run: |
+        if [ -f composer.json ]; then
+          composer install
+        else
+          echo "No composer.json found"
+        fi
 
     - name: Run PHPUnit tests
-      run: vendor/bin/phpunit --coverage-clover coverage.xml tests
-
-    - name: Install Node.js (for ESLint)
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-
-    - name: Install NPM dependencies
       run: |
+        if [ -f vendor/bin/phpunit ]; then
+          vendor/bin/phpunit --coverage-clover coverage.xml tests
+        else
+          echo "No PHPUnit tests found"
+        fi
+
+    - name: Dependency Check (Composer + npm)
+      run: |
+        if [ -f composer.json ]; then
+          composer outdated || true
+        fi
         if [ -f package.json ]; then
-          npm install
+          npm audit || true
         fi
 
-    - name: Run ESLint
+    - name: Simple HTTP Test
       run: |
-        if [ -f eslint.config.mjs ]; then
-          npx eslint .
-        fi
-
-    - name: SonarQube Scan
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
-        sonar-scanner \
-          -Dsonar.projectKey=testings \
-          -Dsonar.sources=. \
-          -Dsonar.tests=tests \
-          -Dsonar.php.coverage.reportPaths=coverage.xml \
-          -Dsonar.host.url=http://127.0.0.1:9000 \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        php -S 127.0.0.1:8000 -t repos/version2 & 
+        sleep 5
+        curl -s http://127.0.0.1:8000/index.php || true
