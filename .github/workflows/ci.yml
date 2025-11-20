@@ -56,14 +56,3 @@ jobs:
         else
           echo "No JavaScript files found, skipping ESLint"
         fi
-
-    - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@v2
-      env:
-        SONAR_HOST_URL: "http://127.0.0.1:9000"
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        args: >
-          -Dsonar.projectKey=version2
-          -Dsonar.sources=.
-          -Dsonar.php.coverage.reportPaths=coverage.xml
