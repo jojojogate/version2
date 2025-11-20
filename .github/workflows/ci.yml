@@ -24,16 +24,12 @@ jobs:
       run: |
         if [ -f composer.json ]; then
           composer install
-        else
-          echo "No composer.json found"
         fi
 
     - name: Run PHPUnit tests
       run: |
         if [ -f vendor/bin/phpunit ]; then
           vendor/bin/phpunit --coverage-clover coverage.xml tests
-        else
-          echo "No PHPUnit tests found"
         fi
 
     - name: Dependency Check (Composer + npm)
@@ -42,6 +38,7 @@ jobs:
           composer outdated || true
         fi
         if [ -f package.json ]; then
+          npm install
           npm audit || true
         fi
 
@@ -50,3 +47,12 @@ jobs:
         php -S 127.0.0.1:8000 -t repos/version2 & 
         sleep 5
         curl -s http://127.0.0.1:8000/index.php || true
+
+    - name: ESLint Security Scan
+      run: |
+        if [ -f package.json ]; then
+          npm install eslint eslint-plugin-security --save-dev
+          npx eslint . --ext .js --plugin security
+        else
+          echo "No JavaScript files found, skipping ESLint"
+        fi
